@@ -68,7 +68,8 @@ local function show_floating_window(opts, path)
     vim.cmd("q")
   end, { noremap = true, silent = true, buffer = buf })
 
-  vim.fn.termopen("visidata " .. path, {
+  vim.fn.jobstart("visidata " .. path, {
+    term = true,
     on_exit = function()
       if opts.remove_file then
         vim.fn.system("rm -f " .. path)
@@ -82,7 +83,7 @@ end
 local function show_in_new_buffer(opts, path)
   local buf = vim.api.nvim_create_buf(false, true)
   vim.api.nvim_buf_set_name(buf, "VisiData: " .. path)
-  vim.api.nvim_buf_set_option(buf, "buflisted", true)
+  vim.api.nvim_set_option_value('buflisted', true, { buf = 0 })
   local current_buf = vim.api.nvim_get_current_buf()
   vim.api.nvim_set_current_buf(buf)
   vim.api.nvim_buf_set_keymap(buf, 't', opts.keymap.exit_terminal_mode, '<C-\\><C-n>', { noremap = true })
@@ -93,7 +94,8 @@ local function show_in_new_buffer(opts, path)
   end, { noremap = true, silent = true, buffer = buf })
 
 
-  vim.fn.termopen("visidata " .. path, {
+  vim.fn.jobstart("visidata " .. path, {
+    term = true,
     on_exit = function()
       vim.fn.system("rm -f " .. path)
       vim.api.nvim_set_current_buf(current_buf)
