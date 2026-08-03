@@ -140,7 +140,7 @@ function M.visualise_dataframe(opts, mode)
         show_floating_window(opts, df_path)
       end
     else
-      vim.notify("Failed to export DataFrame.", vim.log.levelsgERROR)
+      vim.notify("Failed to export DataFrame.", vim.log.levels.ERROR)
     end
   end)
 end
