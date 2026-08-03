@@ -13,14 +13,17 @@ local function save_dataframe_py_expr(df_var, path)
           from pathlib import Path
           try:
               import polars as pl
-              polars_installed = True
+              polars_imported = True
           except ImportError:
-              polars_installed = False
+              polars_imported = False
           try:
               import pandas as pd
-              pandas_installed = True
+              pandas_imported = True
           except ImportError:
-              pandas_installed = False
+              pandas_imported = False
+
+          if not (polars_imported or pandas_imported):
+              raise Exception('Neither polars nor pandas imported (missing or error on import).')
 
           var_name = "%s"
           file_path = "%s"
@@ -31,11 +34,11 @@ local function save_dataframe_py_expr(df_var, path)
 
           df_var = eval(var_name)
 
-          if pandas_installed and isinstance(df_var, pd.DataFrame):
+          if pandas_imported and isinstance(df_var, pd.DataFrame):
               df_var.to_csv(file_path, index=True)
-          elif polars_installed and isinstance(df_var, pl.DataFrame):
+          elif polars_imported and isinstance(df_var, pl.DataFrame):
               df_var.write_csv(file_path)
-          elif polars_installed and isinstance(df_var, pl.LazyFrame):
+          elif polars_imported and isinstance(df_var, pl.LazyFrame):
               df_var.collect().write_csv(file_path)
 
           if Path(file_path).exists():
