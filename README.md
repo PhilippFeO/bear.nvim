@@ -26,6 +26,23 @@ https://github.com/user-attachments/assets/55e22539-9938-4b48-9ec5-b1b6a43b976b
 }
 ```
 
+You can embed your own Python logic via
+
+```lua
+opts = {
+    custom_python_logic = [[
+if pandas_imported and isinstance(df_manager.df, (pd.DataFrame, pd.Series)):
+    if df_var.shape == (1, 2):
+        print('Correct shape.')
+    else:
+        print('Wrong shape.')
+]]
+}
+```
+
+The `pandas`/`polars` object **is referenced as** `df_var`. It is recommended to guarad your logic with {`pandas`, `polars`}`_imported.`
+No extra indentation needed (applied by the plugin), only `[[…]]` strings are supported.
+
 
 <details>
 <summary>Default Confguration</summary>
