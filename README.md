@@ -120,6 +120,7 @@ You can see my debugging setup [here](https://github.com/nelnn/dotfiles/blob/mai
 | DFView | View `DataFrame`/`Series` in a floating window|
 | DFViewBuf | View `DataFrame`/`Series` in a new buffer|
 | DFClean | Clear cache directory|
+| DFCode | Print Python code which saves your `DataFrame`/`Series` (to debug your `custom_python_logic`) |
 
 
 > [!NOTE]
