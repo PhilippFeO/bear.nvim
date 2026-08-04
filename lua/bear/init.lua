@@ -31,11 +31,11 @@ function M.setup(opts)
     require("bear.utils").clean_cache(opts)
   end, { desc = "Clean cache directory" })
 
-  vim.keymap.set("n", opts.keymap.visualise,
+  vim.keymap.set({ "n", "v" }, opts.keymap.visualise,
     function() require("bear.core").visualise_dataframe(opts, "float") end,
     { desc = "Visualise DataFrame in floating window" })
 
-  vim.keymap.set("n", opts.keymap.visualise_buf,
+  vim.keymap.set({ "n", "v" }, opts.keymap.visualise_buf,
     function() require("bear.core").visualise_dataframe(opts, "buffer") end,
     { desc = "Visualise DataFrame in new buffer" })
 end
