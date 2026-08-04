@@ -3,8 +3,15 @@ local M = {}
 --- Returns the text spanned by the last visual selection (the '< / '> marks).
 --- Supports charwise, linewise and blockwise selections; multi-line selections
 --- are joined with a single space so the result is usable as one expression.
----@return string selection The selected text, or "" if no selection is set.
+---@return string selection The selected text, or "" if no selection is active.
 function M.get_visual_selection()
+  -- The '< / '> marks stick around from the *last* visual selection even after
+  -- leaving Visual mode, so only trust them while a selection is actually live.
+  local mode = vim.fn.mode()
+  if mode ~= "v" and mode ~= "V" and mode ~= "\22" then
+    return ""
+  end
+
   -- To use the `'<` and `'>` marks, we have to leave Visual mode.
   vim.cmd('normal! ' .. vim.api.nvim_replace_termcodes('<ESC>', true, false, true))
   local start_pos = vim.fn.getpos("'<")
