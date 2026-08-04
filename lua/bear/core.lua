@@ -7,7 +7,7 @@ local Mode = {
   BUFFER = "buffer"
 }
 
-local function save_dataframe_py_expr(df_var, path)
+local function save_dataframe_py_expr(df_var, path, custom_python_logic)
   return string.format([[
       try:
           from pathlib import Path
@@ -36,13 +36,15 @@ local function save_dataframe_py_expr(df_var, path)
               df_var.write_csv(file_path)
           elif polars_imported and isinstance(df_var, pl.LazyFrame):
               df_var.collect().write_csv(file_path)
+          %s
 
           if Path(file_path).exists():
               print(f"SUCCESS: DataFrame saved to {file_path}")
       except Exception as e:
           print("ERROR: " + str(e))
-  ]], df_var, path)
+  ]], df_var, path, custom_python_logic)
 end
+M.sdpe = save_dataframe_py_expr
 
 local function show_floating_window(opts, path)
   local width = math.floor(vim.o.columns * opts.window.width)
@@ -132,7 +134,7 @@ function M.visualise_dataframe(opts, mode)
 
   local df_path = vim.fn.expand(opts.cache_dir .. "/" .. opts.file_name)
 
-  local expr = save_dataframe_py_expr(df_var, df_path)
+  local expr = save_dataframe_py_expr(df_var, df_path, opts.custom_python_logic)
 
   session:evaluate(expr, function(err, _)
     if err then
