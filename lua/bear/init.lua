@@ -19,6 +19,14 @@ M.config = {
 function M.setup(opts)
   opts = vim.tbl_deep_extend("force", {}, M.config, opts or {})
 
+  -- Indent every line but the first by 8 spaces to match the surrounding
+  -- try/except block's nesting level once spliced into the Python snippet.
+  local logic_per_line = vim.fn.split(opts.custom_python_logic, '\\n')
+  for i = 2, #logic_per_line do
+    logic_per_line[i] = string.rep(' ', 8) .. logic_per_line[i]
+  end
+  opts.custom_python_logic = table.concat(logic_per_line, '\n')
+
   vim.api.nvim_create_user_command("DFView", function()
     require("bear.core").visualise_dataframe(opts, "float")
   end, { desc = "Visualise DataFrame in floating window under cursor" })
