@@ -64,7 +64,7 @@ https://github.com/user-attachments/assets/55e22539-9938-4b48-9ec5-b1b6a43b976b
 </details>
 
 ## 🚀 Usage (with default keymaps)
-- `<leader>df`/`<leader>dfb` to view the dataframe under the cursor.
+- `<leader>df`/`<leader>dfb` to view the dataframe under the cursor or the visual selection.
 - `<leader>df`/`<leader>dfb` in the repl session and input the dataframe variable.
 - `<C-o>` to exit from terminal to normal mode and `i` to enter. This is useful
   when you want to change buffers.
