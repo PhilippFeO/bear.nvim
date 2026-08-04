@@ -31,7 +31,7 @@ You can embed your own Python logic via
 ```lua
 opts = {
     custom_python_logic = [[
-if pandas_imported and isinstance(df_var.df, (pd.DataFrame, pd.Series)):
+elif pandas_imported and isinstance(df_var.df, (pd.DataFrame, pd.Series)):
     if df_var.df.shape == (1, 2):
         print('Correct shape.')
     else:
@@ -59,10 +59,10 @@ if __name__ == '__main__':
     df_man = MyDFManager(Path('path/to/csv'))
 ```
 
-Then, displaying the `pd.DataFrame` while on `df_man` won't work, because it isn't a `pd.DataFrame` and you would need to add workaround lines like `df_man.df` to you code. With the provided `custom_python_logic`, you can.
+Displaying the `pd.DataFrame` while on `df_man` won't work, because it isn't a `pd.DataFrame` and you would need to add workaround lines like `df_man.df` to you code. With the provided `custom_python_logic`, you can.
 </details>
 
-The `pandas`/`polars` object **is referenced as** `df_var`. It is recommended to guarad your logic with {`pandas`, `polars`}`_imported.`
+Starting with `elif` is mandatory to avoid errors. The `pandas`/`polars` object **is referenced as** `df_var`. It is recommended to guarad your logic with {`pandas`, `polars`}`_imported.`
 No extra indentation needed (applied by the plugin), only `[[…]]` strings are supported.
 
 
