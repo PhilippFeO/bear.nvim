@@ -28,10 +28,6 @@ local function save_dataframe_py_expr(df_var, path)
           var_name = "%s"
           file_path = "%s"
 
-          if var_name not in locals() and var_name not in globals():
-              print(f"ERROR: Variable '{var_name}' not found")
-              exit()
-
           df_var = eval(var_name)
 
           if pandas_imported and isinstance(df_var, (pd.DataFrame, pd.Series)):
@@ -110,6 +106,9 @@ local function show_in_new_buffer(opts, path)
   vim.cmd("startinsert")
 end
 
+--- Evaluates a DataFrame expression in the active debug session and shows it in VisiData.
+---@param opts table Plugin config (cache_dir, file_name, window, keymap, ...).
+---@param mode "float"|"buffer" Where to display the VisiData output.
 function M.visualise_dataframe(opts, mode)
   opts = opts or {}
   vim.fn.system("mkdir -p " .. opts.cache_dir)
@@ -119,12 +118,15 @@ function M.visualise_dataframe(opts, mode)
     return
   end
 
-  local df_var = vim.fn.expand("<cword>")
+  local df_var = require('bear.utils').get_visual_selection()
   if df_var == "" then
-    df_var = vim.fn.input("Enter dataframe variable name: ")
+    df_var = vim.fn.expand("<cword>")
     if df_var == "" then
-      vim.notify("No variable specified", vim.log.levels.WARN)
-      return
+      df_var = vim.fn.input("Enter dataframe variable name: ")
+      if df_var == "" then
+        vim.notify("No variable specified", vim.log.levels.WARN)
+        return
+      end
     end
   end
 
